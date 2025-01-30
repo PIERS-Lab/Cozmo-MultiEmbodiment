@@ -23,30 +23,33 @@ class coz:
         await self.system.say_text("My apologies, But I am unable to fufill your request " + detail).wait_for_completed()
 
     #It needs to take input as apart of analyzing the task
-    async def grabCube(self, cbID):
-        self.system.set_head_angle(degrees(0)).wait_for_completed()
+    async def findCube(self, cbID):
+        await self.system.set_head_angle(degrees(0)).wait_for_completed()
         if (cbID != self.cubeID):
             await self.failmsg(detail = "as I cannot move this cube")
             return
         #look for cube
-        cozmo.robot.Robot.world_factory.wait_for_observed_light_cube
         currBehavior = self.system.start_behavior(cozmo.behavior.BehaviorTypes.LookAroundInPlace)
         try: 
-            found =  self.system.world_factory.wait_for_observed_light_cube(timeout = 20)
-            while (found.cube_id != cbID):
-                found = self.system.world_factory.wait_for_observed_light_cube(timeout = 20, include_existing = False)
+            found = await self.system.world.wait_for_observed_light_cube(timeout = 40)
+            print(found.cube_id)
+            while (int(found.cube_id) != int(cbID)):
+                #print("Found has ID: ", found.cube_id, "\n", "cbID: ", cbID)
+                found = await self.system.world.wait_for_observed_light_cube(timeout = 10, include_existing=False)
                 #if we can't find the right cube, fail
-        
+            print("exited loop!\n")
         except asyncio.TimeoutError:
-            self.system.behavior_factory.stop(currBehavior)
-            print("Didn't see the correct cube!")
-            return 1
-
+            cozmo.behavior.Behavior.stop(currBehavior)
+            await self.system.say_text("I couldn't find my cube", use_cozmo_voice=True).wait_for_completed()
+            
+            print("returning!\n")
+            return False
+        print("strting Cube Reconition process\n")    
         cozmo.behavior.Behavior.stop(currBehavior)
         await self.system.say_text("Cube Found!", play_excited_animation=True,use_cozmo_voice=True).wait_for_completed()
         #Cozmo has some sort of way to align with the cube, figure this out and use it
         #try just picking up the cube and moving it to it's start for now, command processing is still a ways away.....
-        #
-        return 0
+        
+        return True
 
    
