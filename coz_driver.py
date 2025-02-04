@@ -11,5 +11,3 @@ async def test(connection):
     print("i'm out!\n")
     return None
 cozmo.connect_with_tkviewer(test)
-
-

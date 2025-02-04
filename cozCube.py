@@ -31,7 +31,7 @@ class coz:
         #look for cube
         currBehavior = self.system.start_behavior(cozmo.behavior.BehaviorTypes.LookAroundInPlace)
         try: 
-            found = await self.system.world.wait_for_observed_light_cube(timeout = 40)
+            found = await self.system.world.wait_for_observed_light_cube(timeout = 20)
             print(found.cube_id)
             while (int(found.cube_id) != int(cbID)):
                 #print("Found has ID: ", found.cube_id, "\n", "cbID: ", cbID)
@@ -44,7 +44,7 @@ class coz:
             
             print("returning!\n")
             return False
-        print("strting Cube Reconition process\n")    
+        print("strting Cube Recognition process\n")    
         cozmo.behavior.Behavior.stop(currBehavior)
         await self.system.say_text("Cube Found!", play_excited_animation=True,use_cozmo_voice=True).wait_for_completed()
         #Cozmo has some sort of way to align with the cube, figure this out and use it
@@ -52,4 +52,6 @@ class coz:
         
         return True
 
-   
+    #Reconizing a certain position/destination
+    #   Work on recognition of unique objects
+    #
