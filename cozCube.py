@@ -20,15 +20,19 @@ class coz:
 
     async def failmsg(self, detail = "."):
         #self.system.robot.Robot.say_text("My apolgies, But I am unable to fufill your request " + detail, use_cozmo_voice=True)
-        await self.system.say_text("My apologies, But I am unable to fufill your request " + detail).wait_for_completed()
+        await self.system.say_text("I can't do that! " + detail).wait_for_completed()
 
     #It needs to take input as apart of analyzing the task
     async def findCube(self, cbID):
+        import ipdb; 
         await self.system.set_head_angle(degrees(0)).wait_for_completed()
         if (cbID != self.cubeID):
-            await self.failmsg(detail = "as I cannot move this cube")
+            await self.failmsg(detail = "as I don't own this cube")
             return
         #look for cube
+        
+        #this line is causing some bad mojo jojo 
+       
         currBehavior = self.system.start_behavior(cozmo.behavior.BehaviorTypes.LookAroundInPlace)
         try: 
             found = await self.system.world.wait_for_observed_light_cube(timeout = 20)
@@ -44,7 +48,7 @@ class coz:
             
             print("returning!\n")
             return False
-        print("strting Cube Recognition process\n")    
+        #print("starting Cube Recognition process\n")    
         cozmo.behavior.Behavior.stop(currBehavior)
         await self.system.say_text("Cube Found!", play_excited_animation=True,use_cozmo_voice=True).wait_for_completed()
         #Cozmo has some sort of way to align with the cube, figure this out and use it
@@ -53,5 +57,6 @@ class coz:
         return True
 
     #Reconizing a certain position/destination
+    #   color detection?
     #   Work on recognition of unique objects
     #
