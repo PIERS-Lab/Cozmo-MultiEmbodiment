@@ -57,7 +57,7 @@ class coz:
     #end point will be a cozmo pose
     # if return _to_start is set to true
     # cozmo will Ignore the end point argument and just return to his starting position if not given one
-    async def moveCube(self, cbID, endpoint = cozmo.util.Pose(0,0, 0, angle_z=cozmo.util.degrees(0)), return_to_start = False):
+    async def moveCube(self, cbID, endpoint = cozmo.util.Pose(0,0, 0, angle_z=cozmo.util.degrees(0))):
         temp = await self.findCube(cbID)
         if (temp == False):
             return False
