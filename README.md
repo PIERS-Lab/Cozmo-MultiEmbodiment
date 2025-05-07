@@ -14,9 +14,7 @@ The Goal is to both get the robot working to:
 Current robots in scope:
 
   - Cozmo- Primary robot
-  
   - Vector- In consideration
-  
   - Vex Aim- Possible alternative to Cozmo
 
 
