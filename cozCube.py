@@ -5,7 +5,7 @@ import time
 import cozmo 
 from cozmo import *
 from cozmo.util import degrees
-
+from cozmo.objects import CustomObjectMarkers
 
 #this is like the active connection, so most actions the cozmo will take are used through this object
 #cozmo.conn.robot.Robot.
@@ -17,6 +17,11 @@ class coz:
         #system will be a cozmo.conn.cozmoConnection.robot.Robot object
         self.system = system
         self.cubeID = cube_Num
+        #from the person's position, goal 0 is far left, goal 1 is middle, goal 2 is far right
+        self.goals = [self.system.world.define_custom_wall(CustomObjectTypes.CustomType02,
+                                              CustomObjectMarkers.Triangles5,
+                                              150, 120,
+                                              50, 30, True)]
         print("constructor called!\n")
         # set up goal markers Goals are x by x by x at their base, a wall is used due to other options being not suitable
         
@@ -64,6 +69,37 @@ class coz:
         await self.system.set_lift_height(0)
         #back away from cube to avoid messing with it accidentally
         await self.system.drive_straight(cozmo.util.distance_inches(-1), cozmo.util.speed_mmps(100)).wait_for_completed()
+
+    async def find_goal(self, goal):
+        await self.system.set_head_angle(degrees(0)).wait_for_completed()
+        if (cbID != self.cubeID):
+            await self.failmsg(detail = "as I don't own this cube")
+            return
+        #look for cube
+        #To-Do: make this more robust, 
+        #have cozmo search a little harder (maybe have him move around to account for the poor range of his vision)
+        currBehavior = self.system.start_behavior(cozmo.behavior.BehaviorTypes.LookAroundInPlace)
+        try: 
+            found = await self.system.world.wait_for_observed_light_cube(timeout = 20)
+            #print(found.cube_id)
+            while (int(found.cube_id) != int(cbID)):
+                #print("Found has ID: ", found.cube_id, "\n", "cbID: ", cbID)
+                found = await self.system.world.wait_for_observed_light_cube(timeout = 10, include_existing=False)
+                #if we can't find the right cube, fail
+            #print("exited loop!\n")
+        except asyncio.TimeoutError:
+            cozmo.behavior.Behavior.stop(currBehavior)
+            await self.system.say_text("I couldn't find the goal", use_cozmo_voice=True).wait_for_completed()
+            
+            #print("returning!\n")
+            return False
+        #print("starting Cube Recognition process\n")    
+        cozmo.behavior.Behavior.stop(currBehavior)
+        #await self.system.say_text("Cube Found!", play_excited_animation=True,use_cozmo_voice=True).wait_for_completed()
+        
+
+    async def delivers(self, goalPose)
+
 
         
     # end point is a cozmo pose
