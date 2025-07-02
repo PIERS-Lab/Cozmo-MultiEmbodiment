@@ -28,7 +28,7 @@ async def test_find_goal(connection):
     testiee = await coz.create(await connection.wait_for_robot(), 1)
     result = await testiee.find_goal(0)
     if (result != False):
-        await testiee.robot.say_text("Goal Found!", play_excited_animation=True,use_cozmo_voice=True).wait_for_completed()
+        await testiee.robot.say_text("Goal Found!", play_excited_animation=True, use_cozmo_voice=True).wait_for_completed()
         return
     return
 
@@ -53,4 +53,4 @@ async def test_deliver(connection):
     await testiee.deliver(goalPose)
     return
 
-cozmo.connect_with_tkviewer(test_deliver)
+cozmo.connect_with_3dviewer(test_deliver, enable_camera_view=True)
