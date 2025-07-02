@@ -20,23 +20,22 @@ class coz:
                                               CustomObjectMarkers.Triangles5,
                                               150, 120,
                                               132, 132, True)]
-        # set up goal markers Goals are x by x by x at their base, a wall is used due to other options being not suitable
+        # set up goal markers Goals are x by x by x (still wip) at their base, a wall is used due to other options being not suitable
         return self
         
     async def failmsg(self, detail = "."):
-        #self.system.robot.Robot.say_text("My apolgies, But I am unable to fufill your request " + detail, use_cozmo_voice=True)
         await self.robot.say_text("I can't do that! " + detail).wait_for_completed()
 
-    #It needs to take input as apart of analyzing the task
-    #returns the found lightcube object
+    # It needs to take input as apart of analyzing the task
+    # returns the found lightcube object
     async def findCube(self, cbID):
         await self.robot.set_head_angle(degrees(0)).wait_for_completed()
         if (cbID != self.cubeID):
             await self.failmsg(detail = "as I don't own this cube")
             return
-        #look for cube
-        #To-Do: make this more robust, 
-        #have cozmo search a little harder (maybe have him move around to account for the poor range of his vision)
+        # look for cube
+        ''' To-Do: make this more robust, 
+        have cozmo search a little harder (maybe have him move around to account for the poor range of his vision)'''
         currBehavior = self.robot.start_behavior(cozmo.behavior.BehaviorTypes.LookAroundInPlace)
         try: 
             found = await self.robot.world.wait_for_observed_light_cube(timeout = 20)
@@ -57,7 +56,7 @@ class coz:
 
     async def drop_cube(self):
         await self.robot.set_lift_height(0).wait_for_completed()
-        #back away from cube to avoid messing with it accidentally
+        # back away from cube to avoid messing with it accidentally
         await self.robot.drive_straight(cozmo.util.distance_inches(-1), cozmo.util.speed_mmps(100)).wait_for_completed()
     # if cozmo fails for any reason, false is returned, other wise the pose of the desired object is returned instead
     async def find_goal(self, goalNum):
