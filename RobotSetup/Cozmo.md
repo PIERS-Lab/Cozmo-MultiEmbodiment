@@ -77,7 +77,7 @@ pip install PyOpenGL
   adb --version
   ```
   
-### usbmuxd 
+### Usbmuxd 
 - install Android Debug Bridge
 ```- The instructions for usbmuxd cover the setup needed there
 sudo apt-get install usbmuxd
