@@ -88,13 +88,12 @@ usbmuxd --version
 ```
 -if there are any issues, I have linked the websites for both above.
 ## Running Programs 
+clone this repo so that you have the project code there
+```
+git clone https://github.com/PIERS-Lab/Cozmo-MultiEmbodiment
+```
 - Once evertyhing is all squared off, run through the following to run programs
 - connect to the cozmo with your secondary device and put it into SDK mode
 - plug the secondary devices into the computer you'll use to run the programs vis USB
 - Verify that the device connection is working if needed (if using adb, just run ``` adb devices ```).
 - Then just run the program on the primary device and the robot will properly react. 
-
-
-
-
-
