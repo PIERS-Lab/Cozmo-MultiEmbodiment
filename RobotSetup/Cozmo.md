@@ -8,66 +8,85 @@
 ## Enviornment
 - Have a virtual enviornment setup with python 3.5.6, later versions have a deprecated async function
 that the Cozmos use, so they won't work on newer python versions.
+-If you you haven't done that before, I recommend pyenv, it allows you to manage both virtual enviornments and python versions
+###Pyenv
+-clone the repository, this command will automatically install with the virtualenv plugin
+```
+git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv
+```
+-Add the following into your bashrc (or equivalent depending on filesystem
+```
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+if command -v pyenv 1>/dev/null 2>&1; then
+ eval "$(pyenv init -)"
+fi
+```
+-Open up a new terminal and check if pyenv is correctly installed
+```
+pyenv --help
+```
+-once that is giving an output that's not "command not recognized", install python 3.5 via pyenv
+```
+pyenv install 3.5
+```
+-Finally make your enviornment, I have named it "cozmoEnv" but this can be changed if you want
+```
+pyenv virtualenv 3.5 cozmoEnv
+```
+
 
 ## SDK installation
 
 You can find these instructions on the SDK's website on the internet archive, but considering that could 
 go down any minute, I am compiling the linux steps here
 
-### Linux
+#### Important!
+- You will need to activate your enviornment every time you want to set up anything with the cozmos or run any programs
 
-Install python 3.5 if you don't have it
-
+- if you used pyenv the command will look like this
 ```
-sudo add-apt-repository ppa:deadsnakes
-sudo apt-get update
-sudo apt-get install python3.5 python3.5-tk 
+pyenv activate [env]
 ```
 
-Setup virtualenv (you can also use anaconda for this, but virtual env is easiest)
-```
-sudo apt-get install python-pip
-pip install virtualenv
-virtualenv -p python3.5 ~/cozmo-env
-```
-#### Imoprtant!
-You will need to activate your enviornment every time you want to set up anything with the cozmos or run any programs
-
-if you are using anaconda you can do 
-```
-conda activate [envName]
-```
-
-if you are using venev, you need to source the setup file
-```
-source ~/cozmo-env/bin/activate
-```
-
-finally install the SDK itself
+- finally install the SDK itself
 ```
 pip install 'cozmo[camera]'
+```
+
+- while you are at it install openGL for the 3d viewer
+```
+pip install PyOpenGL
 ```
 
 ## Robot Setup
 -  An unfortunate property that the cozmos have is that they need to be connected to another device to properly run
 -  You can emulate a phone, but this can be slow and emulator quality varies (I recommend android studio if you intend to do this)
--  - For each device you need to download the cozmo app, luckily as of the time of writing this, it is avaliable on both
-- IOS and android.
+-  - For each device you need to download the cozmo app, luckily as of the time of writing this, it is avaliable on both IOS and android.
+   - Make sure you get the 3.4 version of the app, as of writing this, the SDK does not support the most recent version yet.
 - once this is done, you can follow the in-app instructions to get a cozmo moving, and put it into SDK mode via the in-app settings to run programs
 - Now, depending on the OS of the device that you'll be using with the Cozmo,
 - you will need either [ADB](https://developer.android.com/tools/adb)(Android) or [usbmuxd](https://web.archive.org/web/20230324060005/https://github.com/libimobiledevice/usbmuxd)
 ### Android Debug Bridge
-- Add The Platform Tools directory to your path (put his in your .bashrc file so it is automatically run)
-```
-export PATH=${PATH}:[Path to your insatllation]
-```
-- The install path will likely be wherever you downloaded the zip to/android-sdk-linux/platform-tools)
-- you can verify that everything is good using this
-```
-which adb
-```
+- install Android Debug Bridge
+  ```
+  sudo apt-get install adb
+  ```
+  -verify
+  ```
+  adb --version
+  ```
+  
 ### usbmuxd 
-- The instructions for usbmuxd cover the setup needed there
+- install Android Debug Bridge
+```- The instructions for usbmuxd cover the setup needed there
+sudo apt-get install usbmuxd
+```
+-verify
+```
+usbmuxd --version
+```
+-if there are any issues, I have linked the websites for both above.
 ## Running Programs 
 - Once evertyhing is all squared off, run through the following to run programs
 - connect to the cozmo with your secondary device and put it into SDK mode
